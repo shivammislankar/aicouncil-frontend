@@ -1,16 +1,52 @@
-# React + Vite
+# 🧠 AI Council — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+AI Council Frontend is a modern, responsive web interface for interacting with the AI Council backend — a multi-agent AI reasoning system that delivers structured, high-quality answers through collaborative AI roles.
 
-Currently, two official plugins are available:
+This repository contains the **frontend application** for AI Council.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🎨 Modern UI
+- Clean, minimal design
+- Dark / Light theme toggle (global)
+- Responsive layout (desktop & mobile)
 
-## Expanding the ESLint configuration
+### 🧠 AI Council Interaction
+- Ask complex questions
+- Receive structured AI responses
+- Multi-agent reasoning visualization ready
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🔐 Authentication
+- Firebase Authentication
+- Login & Signup flows
+- Secure token-based access
+
+### ⚡ Performance
+- Fast Vite-powered builds
+- Optimized React rendering
+- Instant UI updates
+
+---
+
+## 🏗️ Tech Stack
+
+### Frontend
+- React (Vite)
+- Tailwind CSS
+- React Router
+- Firebase Auth
+- Lucide Icons
+
+### Backend (separate repo)
+- Spring Boot REST API
+- Local LLM via Ollama
+
+👉 **Backend Repository:**  
+https://github.com/shivammislankar/aicouncil-backend
+
+
+
+## 📁 Project Structure
+
