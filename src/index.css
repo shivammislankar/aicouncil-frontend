@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 255 255 255;
+    --foreground: 17 24 39;
+    --card: 243 244 246;
+    --border: 229 231 235;
+    --accent: 0 0 0;
+  }
+
+  .dark {
+    --background: 17 24 39;
+    --foreground: 243 244 246;
+    --card: 31 41 55;
+    --border: 55 65 81;
+    --accent: 255 255 255;
+  }
+}
