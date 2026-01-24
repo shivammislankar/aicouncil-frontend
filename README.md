@@ -47,6 +47,3 @@ This repository contains the **frontend application** for AI Council.
 https://github.com/shivammislankar/aicouncil-backend
 
 
-
-## 📁 Project Structure
-
