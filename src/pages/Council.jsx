@@ -6,10 +6,12 @@ import { signOut, onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../services/firebase'
 import { askCouncil } from '../services/councilApi'
 import { saveChat, loadChats, removeChat } from '../services/chatHistory'
+import { useAuth } from '../context/AuthContext'
 
 export default function Council() {
   const token = localStorage.getItem("token")
   const userEmail = localStorage.getItem("userEmail")
+  const { logout: logoutFromContext } = useAuth() || {}
   const [question, setQuestion] = useState('')
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
@@ -80,6 +82,8 @@ export default function Council() {
       await signOut(auth)
       localStorage.removeItem("token")
       localStorage.removeItem("userEmail")
+      // Clear AuthContext state too, otherwise ProtectedRoute still sees a token
+      if (typeof logoutFromContext === "function") logoutFromContext()
       navigate("/login")
     } catch (err) {
       console.error("Logout failed", err)

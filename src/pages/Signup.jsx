@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../services/firebase';
+import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, AlertCircle, ArrowRight, UserPlus } from 'lucide-react';
 
 export default function Signup() {
@@ -13,6 +14,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,8 +30,8 @@ export default function Signup() {
 
       const token = await userCredential.user.getIdToken();
 
-      // store token
-      localStorage.setItem('token', token);
+      // store token in AuthContext (updates state + localStorage)
+      login(token);
 
       // redirect to council
       navigate('/council');
@@ -63,29 +65,29 @@ export default function Signup() {
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label className="text-sm font-medium">Email</label>
+            <label className="text-sm font-medium text-foreground">Email</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground bg-background text-foreground" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-input"
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-input text-foreground"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-sm font-medium">Password</label>
+            <label className="text-sm font-medium text-foreground">Password</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground bg-background text-foreground" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-input"
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-input text-foreground"
               />
             </div>
           </div>
@@ -100,7 +102,7 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-accent py-2.5 rounded-lg font-semibold flex items-center justify-center gap-2  text-foreground"
+            className="w-full bg-accent py-2.5 rounded-lg font-semibold flex items-center justify-center gap-2 text-background hover:opacity-90 transition"
           >
             {loading ? 'Creating account...' : <>Sign Up <ArrowRight className="w-4 h-4" /></>}
           </button>
