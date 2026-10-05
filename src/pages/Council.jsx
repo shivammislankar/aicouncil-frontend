@@ -103,8 +103,10 @@ export default function Council() {
       const payload = data.payload
       setResult(payload)
 
-      // Save to Firestore history (if signed in)
-      if (user?.uid) {
+      // Save to Firestore history (if signed in).
+      // Greetings/trivial inputs are replied to but never persisted, so the
+      // sidebar isn't cluttered with one-word chats.
+      if (user?.uid && !payload.greeting) {
         try {
           const saved = await saveChat(user.uid, question.trim(), payload)
           setChats((prev) => [saved, ...prev])
@@ -112,6 +114,10 @@ export default function Council() {
         } catch (err) {
           console.error("Failed to save chat history", err)
         }
+      } else if (payload.greeting) {
+        // Greeting isn't in history — clear the selection so the sidebar
+        // doesn't keep highlighting a chat the view no longer shows.
+        setActiveChatId(null)
       }
 
       setQuestion('')
