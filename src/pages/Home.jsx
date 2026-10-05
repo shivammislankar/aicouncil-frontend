@@ -19,7 +19,7 @@ const HeroSection = () => {
   <ThemeToggle />
 </div>
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight bg-background text-foreground">
-          The Council Approach to AI
+          The Veritas Approach to AI
         </h1>
 
         <p className="text-xl bg-background text-foreground max-w-2xl mx-auto leading-relaxed">
@@ -28,7 +28,7 @@ const HeroSection = () => {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
           <button onClick={() => navigate('/login')} className="px-8 py-3 rounded-full bg-foreground text-background font-semibold hover:opacity-90 transition flex items-center justify-center gap-2 group">
-           Try Council <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+           Try Veritas <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
           </button>
           <button onClick={() => navigate('/signup')} className="px-8 py-3 rounded-full bg-foreground text-background font-semibold hover:opacity-90 transition flex items-center justify-center gap-2 group">
             Sign Up <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
@@ -100,19 +100,19 @@ const HowItWorksSection = () => {
         </div>
 
         <div className="mt-12 p-8 rounded-xl border border-border/50  backdrop-blur bg-background text-foreground">
-          <h3 className="text-xl font-bold mb-6">The Council Process</h3>
+          <h3 className="text-xl font-bold mb-6">The Veritas Process</h3>
           <div className="space-y-4">
             <div className="flex gap-4">
               <div className="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center flex-shrink-0 font-bold text-sm">1</div>
               <div>
                 <p className="font-semibold">Input Your Challenge</p>
-                <p className="text-sm text-muted-foreground">Present the problem to the entire council</p>
+                <p className="text-sm text-muted-foreground">Present the problem to all five agents</p>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center flex-shrink-0 font-bold text-sm">2</div>
               <div>
-                <p className="font-semibold">Council Deliberation</p>
+                <p className="font-semibold">Agent Deliberation</p>
                 <p className="text-sm text-muted-foreground">Each role analyzes from their unique perspective</p>
               </div>
             </div>
@@ -165,7 +165,7 @@ const WhyAICouncilSection = () => {
     <section className="py-24 px-4 bg-background text-foreground">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight bg-background text-foreground">Why AI Council?</h2>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight bg-background text-foreground">Why Veritas?</h2>
           <p className="text-muted-foreground text-lg">
             Superior AI reasoning through collaboration
           </p>
@@ -204,11 +204,11 @@ const CTASection = () => {
         <div className="space-y-4">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Ready to Experience Better AI Reasoning?</h2>
           <p className="text-xl text-muted-foreground">
-            Join teams using AI Council to make better decisions, faster.
+            Join teams using Veritas to make better decisions, faster.
           </p>
         </div>
         <button className="px-8 py-4 rounded-full bg-foreground text-background font-semibold hover:opacity-90 transition inline-flex items-center gap-2">
-          Start Your Council <ArrowRight className="w-5 h-5" />
+          Start with Veritas <ArrowRight className="w-5 h-5" />
         </button>
       </div>
     </section>

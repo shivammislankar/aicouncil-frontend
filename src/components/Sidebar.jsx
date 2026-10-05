@@ -137,7 +137,7 @@ export default function Sidebar({
         {/* Footer */}
         <div className="p-3 border-t border-gray-200 dark:border-gray-700">
           <p className="text-xs text-gray-400 dark:text-gray-500 text-center">
-            AI Council
+            Veritas
           </p>
         </div>
       </aside>

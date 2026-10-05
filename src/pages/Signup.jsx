@@ -57,7 +57,7 @@ export default function Signup() {
           </div>
           <h1 className="text-2xl font-bold mt-3">Create Account</h1>
           <p className="text-sm text-muted-foreground">
-            Join AI Council
+            Join Veritas
           </p>
         </div>
 

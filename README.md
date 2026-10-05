@@ -1,8 +1,8 @@
-# 🧠 AI Council — Frontend
+# 🧠 Veritas — Frontend
 
-AI Council Frontend is a modern, responsive web interface for interacting with the AI Council backend — a multi-agent AI reasoning system that delivers structured, high-quality answers through collaborative AI roles.
+Veritas Frontend is a modern, responsive web interface for interacting with the Veritas backend — a multi-agent AI reasoning system that delivers structured, high-quality answers through collaborative AI roles.
 
-This repository contains the **frontend application** for AI Council.
+This repository contains the **frontend application** for Veritas.
 
 ---
 
@@ -13,7 +13,7 @@ This repository contains the **frontend application** for AI Council.
 - Dark / Light theme toggle (global)
 - Responsive layout (desktop & mobile)
 
-### 🧠 AI Council Interaction
+### 🧠 Veritas Interaction
 - Ask complex questions
 - Receive structured AI responses
 - Multi-agent reasoning visualization ready

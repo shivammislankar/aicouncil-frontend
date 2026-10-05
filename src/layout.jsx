@@ -7,9 +7,9 @@ const geist = Geist({ subsets: ["latin"] });
 const geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "AI Council - Multi-Perspective AI Reasoning",
+  title: "Veritas - Multi-Perspective AI Reasoning",
   description:
-    "AI Council brings together multiple AI perspectives to reduce hallucinations and deliver better decisions through collaborative reasoning.",
+    "Veritas brings together multiple AI perspectives to reduce hallucinations and deliver better decisions through collaborative reasoning.",
   generator: "v0.app",
   icons: {
     icon: [

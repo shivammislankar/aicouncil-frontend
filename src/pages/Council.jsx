@@ -113,7 +113,7 @@ export default function Council() {
       setQuestion('')
     } catch (err) {
       console.error(err)
-      setError(err?.message || 'Failed to get council response')
+      setError(err?.message || 'Failed to get a response from Veritas')
     } finally {
       setLoading(false)
     }

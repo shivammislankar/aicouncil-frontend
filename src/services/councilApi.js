@@ -49,7 +49,7 @@ export async function askCouncil(token, question) {
     throw new Error("Your session has expired. Please log out and log back in.");
   }
   if (!response.ok) {
-    throw new Error(`Council request failed (server returned ${response.status})`);
+    throw new Error(`Veritas request failed (server returned ${response.status})`);
   }
 
   return response.json();

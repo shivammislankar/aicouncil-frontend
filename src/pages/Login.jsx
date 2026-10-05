@@ -52,7 +52,7 @@ export default function Login() {
             </div>
             <h1 className="text-2xl font-bold mt-3 ">Welcome Back</h1>
             <p className="text-sm text-muted-foreground">
-              Sign in to access AI Council
+              Sign in to access Veritas
             </p>
           </div>
 

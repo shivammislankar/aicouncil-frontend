@@ -15,7 +15,7 @@ export default function CouncilForm({ token, onResult }) {
       const data = await askCouncil(token, question);
       onResult(data);
     } catch (err) {
-      setError("Council request failed");
+      setError("Veritas request failed");
       console.error(err);
     } finally {
       setLoading(false);
@@ -24,7 +24,7 @@ export default function CouncilForm({ token, onResult }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Ask the Council</h2>
+      <h2>Ask Veritas</h2>
 
       <textarea
         rows={4}

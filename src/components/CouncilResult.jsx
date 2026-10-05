@@ -25,7 +25,7 @@ export default function CouncilResult({ data }) {
       {/* Reasoning */}
       <details className="p-6 rounded-xl border border-border bg-card">
         <summary className="cursor-pointer text-lg font-semibold">
-          How the Council Reasoned
+          How Veritas Reasoned
         </summary>
 
         <div className="space-y-6 mt-4">
