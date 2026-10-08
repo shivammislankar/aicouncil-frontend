@@ -2,13 +2,11 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "cleanUrls": true,
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/login", "dest": "/index.html" },
-    { "src": "/signup", "dest": "/index.html" },
-    { "src": "/council", "dest": "/index.html" },
-    { "src": "/privacy", "dest": "/index.html" },
-    { "src": "/faq", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/signup", "destination": "/index.html" },
+    { "source": "/council", "destination": "/index.html" },
+    { "source": "/privacy", "destination": "/index.html" },
+    { "source": "/faq", "destination": "/index.html" }
   ]
 }
