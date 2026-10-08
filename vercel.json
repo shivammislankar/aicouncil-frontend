@@ -2,7 +2,12 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/signup", "destination": "/index.html" },
+    { "source": "/council", "destination": "/index.html" },
+    { "source": "/privacy", "destination": "/index.html" },
+    { "source": "/faq", "destination": "/index.html" }
   ]
 }

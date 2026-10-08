@@ -48,6 +48,11 @@ export async function askCouncil(token, question) {
   if (response.status === 401) {
     throw new Error("Your session has expired. Please log out and log back in.");
   }
+  if (response.status === 429) {
+    const retryAfter = response.headers.get("Retry-After");
+    const wait = retryAfter ? ` Try again in about ${retryAfter} seconds.` : "";
+    throw new Error(`You're asking questions faster than the free model tiers allow.${wait}`);
+  }
   if (!response.ok) {
     throw new Error(`Veritas request failed (server returned ${response.status})`);
   }

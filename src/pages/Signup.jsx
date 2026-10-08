@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, AlertCircle, ArrowRight, UserPlus } from 'lucide-react';
+import usePageMeta from '../hooks/usePageMeta';
+import Footer from '../components/Footer';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -15,6 +17,13 @@ export default function Signup() {
 
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  usePageMeta({
+    title: "Create a free Veritas account",
+    description:
+      "Create a free Veritas account and start putting your questions to five AI roles at once — with the reasoning shown, not hidden.",
+    path: "/signup",
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,7 +60,8 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-background text-foreground">
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <div className="flex-1 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl">
         <div className="px-6 pt-8 pb-6 border-b border-border text-center">
           <div className="w-10 h-10 bg-accent/20 rounded-lg mx-auto flex items-center justify-center">
@@ -109,12 +119,14 @@ export default function Signup() {
 
           <p className="text-sm text-center text-muted-foreground">
             Already have an account?{' '}
-            <a href="/login" className="text-accent hover:underline">
+            <Link to="/login" className="text-accent hover:underline">
               Sign in
-            </a>
+            </Link>
           </p>
         </form>
       </div>
+      </div>
+      <Footer />
     </div>
   );
 }

@@ -1,11 +1,13 @@
 'use client';
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Brain, Shield, TrendingUp, Zap, CheckCircle } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
+import Footer from '../components/Footer';
+import usePageMeta from '../hooks/usePageMeta';
+
 const HeroSection = () => {
-  const navigate = useNavigate();
   return (
     
     <section className="min-h-screen flex flex-col items-center justify-center px-1 py-1 text-center bg-gradient-to-b from-background via-background to-card">
@@ -27,12 +29,12 @@ const HeroSection = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-          <button onClick={() => navigate('/login')} className="px-8 py-3 rounded-full bg-foreground text-background font-semibold hover:opacity-90 transition flex items-center justify-center gap-2 group">
+          <Link to="/login" className="px-8 py-3 rounded-full bg-foreground text-background font-semibold hover:opacity-90 transition inline-flex items-center justify-center gap-2 group">
            Try Veritas <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
-          </button>
-          <button onClick={() => navigate('/signup')} className="px-8 py-3 rounded-full bg-foreground text-background font-semibold hover:opacity-90 transition flex items-center justify-center gap-2 group">
+          </Link>
+          <Link to="/signup" className="px-8 py-3 rounded-full bg-foreground text-background font-semibold hover:opacity-90 transition inline-flex items-center justify-center gap-2 group">
             Sign Up <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>
@@ -197,6 +199,75 @@ const WhyAICouncilSection = () => {
   );
 };
 
+/**
+ * Launch checklist item 15 - reviews.
+ *
+ * RULE: never write, invent or reword a review, name, rating or photo here.
+ * Fake testimonials are illegal in the US (FTC, 2024) and misleading everywhere.
+ *
+ * To publish a real one, push an object into PLACEHOLDER_REVIEWS below:
+ *
+ *   { quote: "…", name: "Real Name", role: "Real role or company" }
+ *
+ * Only add someone who has given permission, and only with their real words.
+ * No star ratings and no Review schema are used, on purpose.
+ */
+const PLACEHOLDER_REVIEWS = [];
+
+const ReviewsSection = () => {
+  const hasReviews = PLACEHOLDER_REVIEWS.length > 0;
+
+  return (
+    <section className="py-24 px-4 bg-background text-foreground border-t border-border/50" aria-labelledby="reviews-heading">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-12 space-y-4">
+          <h2 id="reviews-heading" className="text-4xl md:text-5xl font-bold tracking-tight">
+            What people are saying
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            Real feedback from real users of Veritas
+          </p>
+        </div>
+
+        {hasReviews ? (
+          <div className="grid md:grid-cols-3 gap-6">
+            {PLACEHOLDER_REVIEWS.map((review, idx) => (
+              <figure key={idx} className="p-8 rounded-xl border border-border/50 bg-card/50 space-y-4">
+                <blockquote className="text-foreground leading-relaxed">
+                  &ldquo;{review.quote}&rdquo;
+                </blockquote>
+                <figcaption className="text-sm text-muted-foreground">
+                  <span className="block font-semibold text-foreground">{review.name}</span>
+                  {review.role}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        ) : (
+          /* Clearly marked empty state - NOT an invented testimonial. */
+          <div className="grid md:grid-cols-3 gap-6">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="p-8 rounded-xl border-2 border-dashed border-border/70 bg-background/40 space-y-3 min-h-[10rem] flex flex-col justify-center text-center"
+              >
+                <span className="inline-block self-start px-2.5 py-1 rounded text-[0.65rem] font-bold uppercase tracking-widest bg-accent/10 text-muted-foreground border border-border/60">
+                  Awaiting real review
+                </span>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  This slot is intentionally empty. A genuine review from a real
+                  user goes here — with their permission. Nothing is ever written
+                  on a customer&rsquo;s behalf.
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
 const CTASection = () => {
   return (
     <section className="py-20 px-4  border-t border-border/50 bg-background text-foreground">
@@ -207,21 +278,38 @@ const CTASection = () => {
             Join teams using Veritas to make better decisions, faster.
           </p>
         </div>
-        <button className="px-8 py-4 rounded-full bg-foreground text-background font-semibold hover:opacity-90 transition inline-flex items-center gap-2">
+        <Link
+          to="/signup"
+          className="px-8 py-4 rounded-full bg-foreground text-background font-semibold hover:opacity-90 transition inline-flex items-center justify-center gap-2"
+        >
           Start with Veritas <ArrowRight className="w-5 h-5" />
-        </button>
+        </Link>
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+          <Link to="/faq" className="hover:text-foreground transition">Frequently asked questions</Link>
+          <Link to="/privacy" className="hover:text-foreground transition">Privacy policy</Link>
+          <Link to="/login" className="hover:text-foreground transition">Sign in</Link>
+        </div>
       </div>
     </section>
   );
 };
 
 export default function Home() {
+  usePageMeta({
+    title: 'Multi-Perspective AI Reasoning | Veritas',
+    description:
+      'Five specialised AI roles deliberate on your question and return one transparent, well-reasoned answer. Analyst, Strategist, Critic, Optimizer and Synthesizer, working together.',
+    path: '/',
+  });
+
   return (
     <main className="min-h-screen">
       <HeroSection />
       <HowItWorksSection />
       <WhyAICouncilSection />
+      <ReviewsSection />
       <CTASection />
+      <Footer />
     </main>
   );
 }

@@ -7,6 +7,8 @@ import { auth } from '../services/firebase'
 import { askCouncil } from '../services/councilApi'
 import { saveChat, loadChats, removeChat } from '../services/chatHistory'
 import { useAuth } from '../context/AuthContext'
+import usePageMeta from '../hooks/usePageMeta'
+import { trackEvent } from '../lib/analytics'
 
 export default function Council() {
   const token = localStorage.getItem("token")
@@ -16,6 +18,12 @@ export default function Council() {
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  usePageMeta({
+    title: "Your Council | Veritas",
+    description: "Ask a question and watch five AI roles deliberate on it.",
+    path: "/council",
+  })
 
   // Sidebar + history state
   const [sidebarOpen, setSidebarOpen] = useState(
@@ -102,6 +110,10 @@ export default function Council() {
       const data = await askCouncil(token, question.trim())
       const payload = data.payload
       setResult(payload)
+
+      // GA4 key event - stands in for the "thank-you page" conversion this
+      // site doesn't have, so form-style successes still get counted.
+      trackEvent('council_answer', { confidence: payload?.confidence ?? 0 })
 
       // Save to Firestore history (if signed in).
       // Greetings/trivial inputs are replied to but never persisted, so the

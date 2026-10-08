@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { Lock, Mail, AlertCircle, ArrowRight } from 'lucide-react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
+import usePageMeta from "../hooks/usePageMeta";
+import Footer from "../components/Footer";
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -15,6 +17,13 @@ export default function Login() {
 
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  usePageMeta({
+    title: "Sign in to Veritas",
+    description:
+      "Sign in to your Veritas account and pick up your five-agent reasoning conversations where you left off.",
+    path: "/login",
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +55,8 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-background text-foreground">
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <div className="flex-1 flex items-center justify-center px-4 py-12">
       <div className="relative w-full max-w-md bg-background text-foreground">
         <div className="bg-card border border-border rounded-xl shadow-2xl overflow-hidden">
           <div className="px-6 pt-8 pb-6 border-b border-border text-center">
@@ -102,9 +112,18 @@ export default function Login() {
             >
               {isLoading ? "Signing in..." : <>Sign In <ArrowRight className="w-4 h-4" /></>}
             </button>
+
+            <p className="text-sm text-center text-muted-foreground">
+              Don't have an account?{' '}
+              <Link to="/signup" className="text-accent hover:underline">
+                Create one
+              </Link>
+            </p>
           </form>
         </div>
       </div>
+      </div>
+      <Footer />
     </div>
   );
 }
