@@ -7,6 +7,7 @@
     { "source": "/signup", "destination": "/index.html" },
     { "source": "/council", "destination": "/index.html" },
     { "source": "/privacy", "destination": "/index.html" },
-    { "source": "/faq", "destination": "/index.html" }
+    { "source": "/faq", "destination": "/index.html" },
+    { "source": "/verify-email", "destination": "/index.html" }
   ]
 }

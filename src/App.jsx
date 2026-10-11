@@ -5,6 +5,7 @@ import Council from "./pages/Council";
 import Signup from "./pages/Signup";
 import Privacy from "./pages/Privacy";
 import Faq from "./pages/Faq";
+import VerifyEmail from "./pages/VerifyEmail";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/faq" element={<Faq />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route
           path="/council"
           element={

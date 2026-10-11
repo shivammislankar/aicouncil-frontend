@@ -20,6 +20,10 @@ const faqs = [
     a: "Yes. An account is what lets Veritas keep your conversation history separate from everyone else's and let you pick up where you left off.",
   },
   {
+    q: "How do I sign in?",
+    a: "Two ways: email + password, or Continue with GitHub. Email sign-ups get a 6-digit verification code in their inbox and must enter it before the council answers their questions; GitHub sign-ins skip that step because GitHub has already verified the address.",
+  },
+  {
     q: "Where are my questions stored?",
     a: "Your questions and Veritas's answers are stored in your account so you can reopen them from the sidebar, and you can delete any of them yourself. The full picture is on the privacy policy page.",
     link: { to: "/privacy", label: "Read the privacy policy" },

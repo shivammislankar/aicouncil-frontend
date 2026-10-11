@@ -54,6 +54,17 @@ export async function askCouncil(token, question) {
     throw new Error(`You're asking questions faster than the free model tiers allow.${wait}`);
   }
   if (!response.ok) {
+    // Unverified password accounts are bounced to /verify-email by the
+    // caller; attach a machine-readable code so it can tell this apart
+    // from a generic server failure.
+    if (response.status === 403) {
+      const data = await response.json().catch(() => ({}));
+      if (data.error === "EMAIL_NOT_VERIFIED") {
+        const err = new Error(data.message || "Verify your email address first.");
+        err.code = "EMAIL_NOT_VERIFIED";
+        throw err;
+      }
+    }
     throw new Error(`Veritas request failed (server returned ${response.status})`);
   }
 

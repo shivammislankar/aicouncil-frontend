@@ -5,6 +5,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import { useAuth } from '../context/AuthContext';
+import { requestOtp } from '../services/auth';
+import GitHubButton from '../components/GitHubButton';
 import { Mail, Lock, AlertCircle, ArrowRight, UserPlus } from 'lucide-react';
 import usePageMeta from '../hooks/usePageMeta';
 import Footer from '../components/Footer';
@@ -42,8 +44,13 @@ export default function Signup() {
       // store token in AuthContext (updates state + localStorage)
       login(token);
 
-      // redirect to council
-      navigate('/council');
+      // Fire the verification code now so it's waiting in the inbox when the
+      // /verify-email page loads. Best-effort: if sending isn't configured
+      // yet (503) or fails, the verify page explains and offers a resend.
+      await requestOtp(email).catch(() => null);
+
+      // redirect to email verification (not straight to the council)
+      navigate('/verify-email');
     } catch (err) {
       console.error(err);
 
@@ -116,6 +123,14 @@ export default function Signup() {
           >
             {loading ? 'Creating account...' : <>Sign Up <ArrowRight className="w-4 h-4" /></>}
           </button>
+
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="flex-1 border-t border-border" />
+            or
+            <span className="flex-1 border-t border-border" />
+          </div>
+
+          <GitHubButton onError={setError} label="Sign up with GitHub" />
 
           <p className="text-sm text-center text-muted-foreground">
             Already have an account?{' '}

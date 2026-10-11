@@ -7,6 +7,7 @@ import { auth } from '../services/firebase'
 import { askCouncil } from '../services/councilApi'
 import { saveChat, loadChats, removeChat } from '../services/chatHistory'
 import { useAuth } from '../context/AuthContext'
+import { verificationStatus } from '../services/auth'
 import usePageMeta from '../hooks/usePageMeta'
 import { trackEvent } from '../lib/analytics'
 
@@ -72,6 +73,21 @@ export default function Council() {
     }
   }, [user?.uid, fetchHistory])
 
+  // Bounce password accounts that still owe us a verified address. Runs once
+  // the Firebase user is known; the verify page sends them back here after.
+  useEffect(() => {
+    if (!user?.uid) return
+    let cancelled = false
+    verificationStatus()
+      .then((status) => {
+        if (!cancelled && status && status.otpEnabled && !status.verified) {
+          navigate('/verify-email', { replace: true })
+        }
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [user?.uid, navigate])
+
   // Persist sidebar open/closed preference
   useEffect(() => {
     localStorage.setItem("sidebarOpen", String(sidebarOpen))
@@ -135,6 +151,12 @@ export default function Council() {
       setQuestion('')
     } catch (err) {
       console.error(err)
+      if (err?.code === 'EMAIL_NOT_VERIFIED') {
+        // Password account that hasn't proven its address yet — the verify
+        // page (not an error banner) is the right destination.
+        navigate('/verify-email', { replace: true })
+        return
+      }
       setError(err?.message || 'Failed to get a response from Veritas')
     } finally {
       setLoading(false)

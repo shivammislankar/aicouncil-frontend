@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /council
+Disallow: /verify-email
 
 Sitemap: https://ai-council-one-livid.vercel.app/sitemap.xml

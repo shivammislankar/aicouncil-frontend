@@ -11,7 +11,17 @@ const collected = [
   {
     item: "Password",
     where: "Firebase Authentication",
-    why: "Stored hashed and salted by Firebase. Veritas never sees or stores it in plain text.",
+    why: "Stored hashed and salted by Firebase. Veritas never sees or stores it in plain text. Not needed if you sign in with GitHub instead.",
+  },
+  {
+    item: "GitHub account link",
+    where: "Firebase Authentication",
+    why: "If you choose Continue with GitHub, Firebase links your GitHub identity to your Veritas account. We receive your GitHub email address and verification state — never your GitHub password.",
+  },
+  {
+    item: "Email verification codes",
+    where: "Veritas server (temporary, hashed)",
+    why: "After signing up with email + password, a 6-digit code is emailed to you. Only the code's hash is stored, codes expire after 10 minutes, and nothing is kept once your address is verified.",
   },
   {
     item: "Your questions and Veritas's answers",

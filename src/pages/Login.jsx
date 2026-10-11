@@ -6,6 +6,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
+import { verificationStatus } from "../services/auth";
+import GitHubButton from "../components/GitHubButton";
 import usePageMeta from "../hooks/usePageMeta";
 import Footer from "../components/Footer";
 
@@ -43,8 +45,16 @@ export default function Login() {
       //    sees the token and allows the redirect to /council.
       login(token);
 
-      // ✅ Navigate after success
-      navigate("/council");
+      // Password accounts must prove their address before using the council.
+      // (GitHub arrivals skip this — their email arrives pre-verified.)
+      try {
+        const status = await verificationStatus();
+        navigate(status.verified ? "/council" : "/verify-email");
+      } catch {
+        // Status check is best-effort; the /council gate redirects to
+        // /verify-email itself if verification turns out to be owed.
+        navigate("/council");
+      }
 
     } catch (err) {
       console.error(err);
@@ -112,6 +122,14 @@ export default function Login() {
             >
               {isLoading ? "Signing in..." : <>Sign In <ArrowRight className="w-4 h-4" /></>}
             </button>
+
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <span className="flex-1 border-t border-border" />
+              or
+              <span className="flex-1 border-t border-border" />
+            </div>
+
+            <GitHubButton onError={setError} />
 
             <p className="text-sm text-center text-muted-foreground">
               Don't have an account?{' '}
