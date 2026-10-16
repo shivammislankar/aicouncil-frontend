@@ -3,6 +3,7 @@ import {
   addDoc,
   query,
   where,
+  orderBy,
   limit,
   getDocs,
   doc,
@@ -40,12 +41,15 @@ export async function saveChat(uid, question, result) {
 
 /**
  * Load the current user's chat history, newest first.
- * Sorted client-side to avoid needing a composite Firestore index.
+ * orderBy runs in Firestore, so with more than MAX_HISTORY chats the newest
+ * ones are returned (a client-side sort would only reorder an arbitrary 100).
+ * Needs the (uid ASC, createdAt DESC) composite index in firestore.indexes.json.
  */
 export async function loadChats(uid) {
   const q = query(
     collection(db, COLLECTION),
     where("uid", "==", uid),
+    orderBy("createdAt", "desc"),
     limit(MAX_HISTORY)
   );
 

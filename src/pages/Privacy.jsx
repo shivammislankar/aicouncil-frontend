@@ -34,8 +34,8 @@ const collected = [
     why: "This is how the answer is generated. Your question is sent to these providers to produce a response.",
   },
   {
-    item: "Session token",
-    where: "Your browser's local storage",
+    item: "Sign-in session",
+    where: "Your browser's storage, managed by Firebase Authentication",
     why: "Keeps you signed in between visits. It is cleared when you log out.",
   },
   {
@@ -79,8 +79,7 @@ const thirdParties = [
 ];
 
 const cookies = [
-  ["`token`", "Keeps you signed in", "Until you log out"],
-  ["`userEmail`", "Shows your name in the sidebar", "Until you log out"],
+  ["Firebase Auth session (IndexedDB)", "Keeps you signed in", "Until you log out"],
   ["`theme`", "Remembers light or dark mode", "Persistent"],
   ["`sidebarOpen`", "Remembers whether the sidebar is open", "Persistent"],
 ];

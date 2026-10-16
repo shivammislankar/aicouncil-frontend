@@ -19,7 +19,7 @@ export default function VerifyEmail() {
   const [email, setEmail] = useState('');
 
   const navigate = useNavigate();
-  const { login, logout } = useAuth();
+  const { logout } = useAuth();
 
   usePageMeta({
     title: 'Verify your email | Veritas',
@@ -68,9 +68,6 @@ export default function VerifyEmail() {
     try {
       const { response, data } = await verifyOtp(code.trim());
       if (response.ok && data.verified) {
-        // Refresh the stored token so downstream calls carry a fresh session.
-        const fresh = await auth.currentUser?.getIdToken(true).catch(() => null);
-        if (fresh) login(fresh);
         navigate('/council', { replace: true });
       } else {
         setCode('');
@@ -89,7 +86,7 @@ export default function VerifyEmail() {
     setInfo('');
     setSending(true);
     try {
-      const { response, data } = await requestOtp(email);
+      const { response, data } = await requestOtp();
       if (response.ok) {
         setInfo('A fresh code is on its way. Check your inbox (and spam folder).');
         setCooldown(RESEND_COOLDOWN_SECONDS);
