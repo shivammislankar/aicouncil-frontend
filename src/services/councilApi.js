@@ -1,72 +1,38 @@
-import { auth } from "./firebase";
+import { apiFetch } from "./http";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+/** The backend gives one council run up to 150s; allow for a cold start on top. */
+const COUNCIL_TIMEOUT_MS = 200000;
 
-/**
- * Resolve a valid Firebase ID token.
- * Firebase tokens expire after 1 hour, so we always ask Firebase for a
- * current token instead of blindly reusing the one saved at login time.
- * Falls back to the passed-in token if the auth session is not ready yet.
- */
-async function resolveToken(fallbackToken) {
-  try {
-    // Wait until Firebase has restored the auth session (fast if already ready)
-    await auth.authStateReady();
-    if (auth.currentUser) {
-      // getIdToken() returns the cached token when still valid,
-      // and automatically refreshes it when expired / about to expire.
-      return await auth.currentUser.getIdToken();
-    }
-  } catch (err) {
-    console.warn("Could not refresh Firebase token, using stored one", err);
-  }
-  return fallbackToken;
-}
+export async function askCouncil(question) {
+  const response = await apiFetch("/api/council/ask", {
+    method: "POST",
+    body: JSON.stringify({ question }),
+    timeoutMs: COUNCIL_TIMEOUT_MS,
+  });
 
-export async function askCouncil(token, question) {
-  const authToken = await resolveToken(token);
-
-  let response;
-  try {
-    response = await fetch(`${API_URL}/api/council/ask`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-
-        // 🔑 THIS LINE IS NON-NEGOTIABLE
-        Authorization: `Bearer ${authToken}`,
-      },
-      body: JSON.stringify({ question }),
-    });
-  } catch {
-    // fetch itself failed → backend unreachable (not running / wrong URL)
-    throw new Error(
-      "Cannot reach the server. Make sure the backend is running on port 8080."
-    );
-  }
+  const data = await response.json().catch(() => ({}));
 
   if (response.status === 401) {
-    throw new Error("Your session has expired. Please log out and log back in.");
+    const err = new Error("Your session has expired. Please sign in again.");
+    err.code = "NOT_SIGNED_IN";
+    throw err;
+  }
+  if (response.status === 403 && data.error === "EMAIL_NOT_VERIFIED") {
+    // Unverified password accounts are bounced to /verify-email by the caller.
+    const err = new Error(data.message || "Verify your email address first.");
+    err.code = "EMAIL_NOT_VERIFIED";
+    throw err;
   }
   if (response.status === 429) {
-    const retryAfter = response.headers.get("Retry-After");
-    const wait = retryAfter ? ` Try again in about ${retryAfter} seconds.` : "";
-    throw new Error(`You're asking questions faster than the free model tiers allow.${wait}`);
+    const retryAfter = Number(response.headers.get("Retry-After"));
+    let wait = "";
+    if (retryAfter > 0 && retryAfter < 120) wait = ` Try again in about ${retryAfter} seconds.`;
+    else if (retryAfter >= 120) wait = ` Try again in about ${Math.ceil(retryAfter / 3600)} hour(s).`;
+    throw new Error((data.error || "You're asking questions too quickly.") + wait);
   }
   if (!response.ok) {
-    // Unverified password accounts are bounced to /verify-email by the
-    // caller; attach a machine-readable code so it can tell this apart
-    // from a generic server failure.
-    if (response.status === 403) {
-      const data = await response.json().catch(() => ({}));
-      if (data.error === "EMAIL_NOT_VERIFIED") {
-        const err = new Error(data.message || "Verify your email address first.");
-        err.code = "EMAIL_NOT_VERIFIED";
-        throw err;
-      }
-    }
-    throw new Error(`Veritas request failed (server returned ${response.status})`);
+    throw new Error(data.error || `Veritas request failed (server returned ${response.status}).`);
   }
 
-  return response.json();
+  return data;
 }

@@ -25,7 +25,7 @@ const HeroSection = () => {
         </h1>
 
         <p className="text-xl bg-background text-foreground max-w-2xl mx-auto leading-relaxed">
-          Five specialized AI roles work together to solve problems better. Reduce hallucinations, force multiple perspectives, and get transparent reasoning.
+          Five specialised AI roles work together to solve problems better. Reduce hallucinations, force multiple perspectives, and get transparent reasoning.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">

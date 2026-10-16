@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../services/firebase';
-import { useAuth } from '../context/AuthContext';
 import { requestOtp } from '../services/auth';
 import GitHubButton from '../components/GitHubButton';
 import { Mail, Lock, AlertCircle, ArrowRight, UserPlus } from 'lucide-react';
@@ -18,7 +17,6 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   usePageMeta({
     title: "Create a free Veritas account",
@@ -33,21 +31,13 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-      const token = await userCredential.user.getIdToken();
-
-      // store token in AuthContext (updates state + localStorage)
-      login(token);
+      // Firebase keeps the session; AuthContext picks it up automatically.
+      await createUserWithEmailAndPassword(auth, email, password);
 
       // Fire the verification code now so it's waiting in the inbox when the
       // /verify-email page loads. Best-effort: if sending isn't configured
       // yet (503) or fails, the verify page explains and offers a resend.
-      await requestOtp(email).catch(() => null);
+      await requestOtp().catch(() => null);
 
       // redirect to email verification (not straight to the council)
       navigate('/verify-email');

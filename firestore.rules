@@ -1,0 +1,32 @@
+rules_version = '2';
+
+// Chat history is written straight from the browser, so these rules are the
+// only thing keeping one user's history away from another. Deploy with:
+//   firebase deploy --only firestore:rules,firestore:indexes
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /chatHistory/{chatId} {
+      // Owners only. Queries must filter on uid == request.auth.uid or they are rejected.
+      allow read, delete: if request.auth != null
+                          && resource.data.uid == request.auth.uid;
+
+      allow create: if request.auth != null
+                    && request.resource.data.keys().hasOnly(['uid', 'question', 'result', 'createdAt'])
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.question is string
+                    && request.resource.data.question.size() > 0
+                    && request.resource.data.question.size() <= 2000
+                    && request.resource.data.result is map
+                    && request.resource.data.createdAt == request.time;
+
+      // History entries are immutable once saved.
+      allow update: if false;
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

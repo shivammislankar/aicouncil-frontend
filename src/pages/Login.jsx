@@ -5,7 +5,6 @@ import { Lock, Mail, AlertCircle, ArrowRight } from 'lucide-react';
 import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebase";
-import { useAuth } from "../context/AuthContext";
 import { verificationStatus } from "../services/auth";
 import GitHubButton from "../components/GitHubButton";
 import usePageMeta from "../hooks/usePageMeta";
@@ -18,7 +17,6 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   usePageMeta({
     title: "Sign in to Veritas",
@@ -33,17 +31,8 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-      const token = await userCredential.user.getIdToken();
-
-      // ✅ Update AuthContext state (not just localStorage) so ProtectedRoute
-      //    sees the token and allows the redirect to /council.
-      login(token);
+      // Firebase keeps the session; AuthContext picks it up automatically.
+      await signInWithEmailAndPassword(auth, email, password);
 
       // Password accounts must prove their address before using the council.
       // (GitHub arrivals skip this — their email arrives pre-verified.)

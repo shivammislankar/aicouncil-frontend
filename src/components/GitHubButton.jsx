@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { loginWithGitHub, syncOAuthProvider } from '../services/auth';
 
 /** The GitHub "mark" (Octocat silhouette path), drawn inline so no asset is needed. */
@@ -20,14 +19,12 @@ function GitHubMark({ className }) {
 export default function GitHubButton({ onError, label = 'Continue with GitHub' }) {
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   async function handleClick() {
     if (busy) return;
     setBusy(true);
     try {
-      const token = await loginWithGitHub();
-      login(token);
+      await loginWithGitHub();
       // Best-effort: if the sync fails, /council's own gate redirects to
       // /verify-email rather than stranding the user.
       await syncOAuthProvider().catch(() => null);

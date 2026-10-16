@@ -2,8 +2,6 @@ import { useState, useEffect, useCallback } from 'react'
 import CouncilResult from '../components/CouncilResult'
 import Sidebar from '../components/Sidebar'
 import { useNavigate } from "react-router-dom"
-import { signOut, onAuthStateChanged } from 'firebase/auth'
-import { auth } from '../services/firebase'
 import { askCouncil } from '../services/councilApi'
 import { saveChat, loadChats, removeChat } from '../services/chatHistory'
 import { useAuth } from '../context/AuthContext'
@@ -12,9 +10,8 @@ import usePageMeta from '../hooks/usePageMeta'
 import { trackEvent } from '../lib/analytics'
 
 export default function Council() {
-  const token = localStorage.getItem("token")
-  const userEmail = localStorage.getItem("userEmail")
-  const { logout: logoutFromContext } = useAuth() || {}
+  const { user, logout } = useAuth()
+  const userEmail = user?.email || ''
   const [question, setQuestion] = useState('')
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
@@ -27,23 +24,18 @@ export default function Council() {
   })
 
   // Sidebar + history state
-  const [sidebarOpen, setSidebarOpen] = useState(
-    () => localStorage.getItem("sidebarOpen") !== "false"
-  )
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    try {
+      return localStorage.getItem("sidebarOpen") !== "false"
+    } catch {
+      return true
+    }
+  })
   const [chats, setChats] = useState([])
   const [activeChatId, setActiveChatId] = useState(null)
   const [historyLoading, setHistoryLoading] = useState(false)
-  const [user, setUser] = useState(null)
 
   const navigate = useNavigate()
-
-  // Track the signed-in Firebase user (uid is needed for Firestore)
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser)
-    })
-    return () => unsubscribe()
-  }, [])
 
   // Load history whenever the user changes
   const fetchHistory = useCallback(async (uid) => {
@@ -90,24 +82,16 @@ export default function Council() {
 
   // Persist sidebar open/closed preference
   useEffect(() => {
-    localStorage.setItem("sidebarOpen", String(sidebarOpen))
+    try {
+      localStorage.setItem("sidebarOpen", String(sidebarOpen))
+    } catch {
+      /* storage unavailable (private mode) — preference just isn't remembered */
+    }
   }, [sidebarOpen])
-
-  if (!token) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg font-semibold">You must be logged in.</p>
-      </div>
-    )
-  }
 
   const handleLogout = async () => {
     try {
-      await signOut(auth)
-      localStorage.removeItem("token")
-      localStorage.removeItem("userEmail")
-      // Clear AuthContext state too, otherwise ProtectedRoute still sees a token
-      if (typeof logoutFromContext === "function") logoutFromContext()
+      await logout()
       navigate("/login")
     } catch (err) {
       console.error("Logout failed", err)
@@ -123,7 +107,7 @@ export default function Council() {
     try {
       setLoading(true)
 
-      const data = await askCouncil(token, question.trim())
+      const data = await askCouncil(question.trim())
       const payload = data.payload
       setResult(payload)
 
@@ -155,6 +139,10 @@ export default function Council() {
         // Password account that hasn't proven its address yet — the verify
         // page (not an error banner) is the right destination.
         navigate('/verify-email', { replace: true })
+        return
+      }
+      if (err?.code === 'NOT_SIGNED_IN') {
+        navigate('/login', { replace: true })
         return
       }
       setError(err?.message || 'Failed to get a response from Veritas')
